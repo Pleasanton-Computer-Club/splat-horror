@@ -1,0 +1,72 @@
+! mg
+! version 1
+
+Constant Story "Some crazy splatoon story with horror";
+Constant Headline "Greetings young traveller. Welcome to the Deepsea Metro. There is a place on the surface that must be investigated. If you do so successfully you may leave. If you fail the only option for you is death.";
+
+Include "parser";
+Include "verblib";
+Include "grammar";
+
+[ Initialise;
+  location = Train_Stop;
+  print "
+        You wake up in the train stop. You had dozed off on a bench.
+        ";
+];
+
+Object Train_Stop "Train Stop"
+ has scenery
+ has light
+ with description "It's dark and gloomy, there are cobwebs. You can hear dedf1sh music playing in the background. Off to the east you see a storm drain, which you do not understand because you are underground. There is a train to the north.",
+ e_to Storm_Drain_Entrance,
+ n_to Train_Car_One;
+
+Object Storm_Drain_Entrance "Storm Drain Entrance"
+ has scenery
+ has light
+ with description "You can vaguely hear some laughter and tears coming from the drain. You see a flicker of light and nothing more. The train station is to the west. The storm drain continues to the east but is blocked by a grate.",
+ w_to Train_Stop,
+! We want to stop the player from going inside because of a grate
+ e_to Storm_Drain_Inside; 
+
+Object Storm_Drain_Inside "Storm Drain Inside"
+ has scenery
+ has light
+ with description "We don't have this yet.",
+w_to Storm_Drain_Entrance;
+
+Object Train_Car_One "Train"
+ has scenery
+ has light
+ with description "You see puddles of turquoise ink on the ground. on the walls are wanted posters of many different inklings and octolings alike. To the west is another train car.",
+ s_to Train_Stop,
+ w_to Train_Car_Two;
+
+Object Train_Car_Two "Train Car Two"
+ has scenery
+ has light
+ with description "You see a young octoling with a ponytail sitting on the bench. You vaguely recognize her. You look away and when you look back -- she's gone! There are train cars to the east and west.",
+e_to Train_Car_One,
+w_to Train_Car_Three;
+
+Object Train_Car_Three "Train Car Three"
+ has scenery
+ has light
+ with description "You see a young inkling, cut down the middle clearly writhing in pain. You blink but this time she remains. There is another train car to the east.",
+ e_to Train_Car_Two;
+
+
+Object -> Jenny "Jenny"
+ with name "Jenny" "inkling",
+ with description "A young inkling girl, writhing in pain. Her tentacles being a pale pink.",
+  life [;
+       Answer: print_ret "Jenny grabs your wrist. 'You should have come earlier' she says while coughing up blood. 'Make sure you save the rest of them. Don't FAssaggggghhhhhh....' ";
+       Ask: print_ret "She grabs your wrist and says '*IT* happened, save the others";
+       Attack: remove self;
+               print_ret "What? You're .. you were supposed to help us. Jenny dies.";
+       ],
+  has female animate proper;
+
+End;
+
